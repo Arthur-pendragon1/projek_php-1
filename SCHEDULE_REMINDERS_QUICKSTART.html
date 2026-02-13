@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quick Start - Email Pengingat Jadwal</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 3px solid #e74c3c;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #34495e;
+            margin-top: 30px;
+            font-size: 18px;
+        }
+        .status {
+            padding: 20px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .status.success {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+        }
+        .status.warning {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+        }
+        .status.error {
+            background: #f8d7da;
+            border-left: 4px solid #dc3545;
+        }
+        .file-check {
+            background: #f8f9fa;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border-left: 3px solid #007bff;
+        }
+        .file-check.ok {
+            border-left-color: #28a745;
+            background: #f0f7f0;
+        }
+        .file-check.missing {
+            border-left-color: #dc3545;
+            background: #fff5f5;
+        }
+        .icon {
+            font-size: 18px;
+            margin-right: 10px;
+        }
+        .steps {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .step-item {
+            padding: 15px;
+            margin: 10px 0;
+            background: white;
+            border-left: 4px solid #007bff;
+            border-radius: 3px;
+        }
+        .code {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 10px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            overflow-x: auto;
+            margin: 10px 0;
+        }
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .btn-primary {
+            background: #007bff;
+            color: white;
+        }
+        .btn-primary:hover {
+            background: #0056b3;
+        }
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+        .btn-success:hover {
+            background: #1e7e34;
+        }
+        .btn-info {
+            background: #17a2b8;
+            color: white;
+        }
+        .btn-info:hover {
+            background: #138496;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background: #007bff;
+            color: white;
+        }
+        tr:hover {
+            background: #f5f5f5;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📧 Email Pengingat Jadwal - Quick Start Guide</h1>
+        
+        <div class="status success">
+            <span class="icon">✅</span>
+            <strong>Sistem Email Pengingat Sudah Diimplementasikan!</strong>
+            <p style="margin: 10px 0 0 0;">
+                Fitur 2-tahap pengiriman email sudah siap digunakan. 
+                Cukup setup cronjob dan sistem akan berjalan otomatis.
+            </p>
+        </div>
+
+        <h2>📋 Status Implementasi</h2>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>Komponen</th>
+                    <th>Status</th>
+                    <th>Deskripsi</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Email 1 - Notifikasi Langsung</strong></td>
+                    <td><span class="icon">✅</span> Active</td>
+                    <td>Dikirim saat jadwal dibuat/diupdate</td>
+                </tr>
+                <tr>
+                    <td><strong>Email 2 - Pengingat Terjadwal</strong></td>
+                    <td><span class="icon">⏳</span> Pending Setup</td>
+                    <td>Perlu cronjob untuk mengirim otomatis</td>
+                </tr>
+                <tr>
+                    <td><strong>Tabel Jadwal Reminder</strong></td>
+                    <td><span class="icon">✅</span> Auto Create</td>
+                    <td>Dibuat otomatis saat jadwal pertama kali dibuat</td>
+                </tr>
+                <tr>
+                    <td><strong>Script Pengirim Email</strong></td>
+                    <td><span class="icon">✅</span> Ready</td>
+                    <td>send_schedule_reminders.php siap dijalankan</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>🚀 Langkah-Langkah Setup Cepat</h2>
+        
+        <div class="steps">
+            <div class="step-item" style="border-left-color: #ffc107;">
+                <h3 style="margin-top: 0;">1️⃣ Verifikasi Email Configuration</h3>
+                <p>Pastikan file <code>includes/email_config.php</code> sudah dikonfigurasi dengan benar.</p>
+                <p><strong>File yang diperlukan:</strong></p>
+                <div class="code">includes/email_config.php</div>
+                <p style="margin: 10px 0;"><strong>Cek:</strong> Setting SMTP_HOST, SMTP_USERNAME, SMTP_PASSWORD sudah benar?</p>
+            </div>
+
+            <div class="step-item" style="border-left-color: #17a2b8;">
+                <h3 style="margin-top: 0;">2️⃣ Test Email Secara Manual</h3>
+                <p>Sebelum setup cronjob, test script secara manual:</p>
+                <div class="code">
+http://localhost/web_sunsal/send_schedule_reminders.php
+                </div>
+                <p>Buka URL di browser dan lihat response JSON. Status harus <code>"success": true</code></p>
+            </div>
+
+            <div class="step-item" style="border-left-color: #28a745;">
+                <h3 style="margin-top: 0;">3️⃣ Setup Cronjob (Pilih 1)</h3>
+                <p><strong>Opsi A: cPanel / Hosting Control Panel</strong></p>
+                <ul>
+                    <li>Buka cPanel → Cron Jobs</li>
+                    <li>Tambah command baru</li>
+                    <li>Atur timing: Every 5 minutes</li>
+                    <li>Command:</li>
+                </ul>
+                <div class="code">
+*/5 * * * * curl -s http://localhost/web_sunsal/send_schedule_reminders.php > /dev/null 2>&1
+                </div>
+
+                <p style="margin-top: 15px;"><strong>Opsi B: Windows Task Scheduler</strong></p>
+                <ul>
+                    <li>Buka Task Scheduler (Win + R → taskschd.msc)</li>
+                    <li>Create Basic Task</li>
+                    <li>Trigger: Every 5 minutes</li>
+                    <li>Action: Program</li>
+                    <li>Program: <code>C:\xampp\php\php.exe</code></li>
+                    <li>Arguments: <code>-f "C:\xampp\htdocs\web_sunsal\send_schedule_reminders.php"</code></li>
+                </ul>
+
+                <p style="margin-top: 15px;"><strong>Opsi C: Manual (Testing Only)</strong></p>
+                <div class="code">
+php send_schedule_reminders.php
+                </div>
+            </div>
+
+            <div class="step-item" style="border-left-color: #dc3545;">
+                <h3 style="margin-top: 0;">4️⃣ Test Dengan Membuat Jadwal</h3>
+                <p>Login ke Web Sunsal sebagai admin dan:</p>
+                <ol>
+                    <li>Buat jadwal dengan waktu <strong>2-3 menit</strong> ke depan</li>
+                    <li>Cek inbox email (Email 1 langsung terima)</li>
+                    <li>Tunggu 5 menit sampai cronjob berjalan</li>
+                    <li>Cek inbox lagi (Email 2 seharusnya terima)</li>
+                </ol>
+                <p><strong>Note:</strong> Jika cronjob belum setup, Email 2 tidak akan terkirim</p>
+            </div>
+
+            <div class="step-item" style="border-left-color: #6f42c1;">
+                <h3 style="margin-top: 0;">5️⃣ Monitor & Troubleshoot</h3>
+                <p>Query database untuk melihat status:</p>
+                <div class="code">
+SELECT * FROM jadwal_reminder 
+WHERE sent_at IS NULL 
+AND reminder_datetime <= NOW();
+                </div>
+                <p>Untuk mengecek email yang sudah dikirim:</p>
+                <div class="code">
+SELECT * FROM jadwal_reminder 
+WHERE sent_at IS NOT NULL 
+ORDER BY sent_at DESC;
+                </div>
+            </div>
+        </div>
+
+        <h2>📚 Dokumentasi Lengkap</h2>
+        
+        <p>Untuk informasi lebih detail, baca file dokumentasi:</p>
+        <div class="btn-group">
+            <a href="SCHEDULE_REMINDERS_README.md" class="btn btn-primary">
+                📖 README.md - Dokumentasi Teknis
+            </a>
+            <a href="SCHEDULE_REMINDERS_SETUP.html" class="btn btn-info">
+                ⚙️ SETUP.html - Panduan Setup Lengkap
+            </a>
+        </div>
+
+        <h2>🔍 Verifikasi File-File</h2>
+        
+        <p><strong>File yang sudah ada:</strong></p>
+        <?php
+        foreach ($requiredFiles as $file => $desc) {
+            $fullPath = $rootDir . '/' . $file;
+            $exists = file_exists($fullPath);
+            $class = $exists ? 'ok' : 'missing';
+            $icon = $exists ? '✅' : '❌';
+            echo "<div class='file-check $class'>";
+            echo "<span class='icon'>$icon</span>";
+            echo "<strong>$file</strong><br>";
+            echo "<small>$desc</small>";
+            echo "</div>";
+        }
+        ?>
+
+        <p style="margin-top: 20px;"><strong>File dokumentasi yang baru dibuat:</strong></p>
+        <?php
+        foreach ($filesToCreate as $file => $desc) {
+            $fullPath = $rootDir . '/' . $file;
+            $exists = file_exists($fullPath);
+            $class = $exists ? 'ok' : 'missing';
+            $icon = $exists ? '✅' : '❌';
+            echo "<div class='file-check $class'>";
+            echo "<span class='icon'>$icon</span>";
+            echo "<strong>$file</strong><br>";
+            echo "<small>$desc</small>";
+            echo "</div>";
+        }
+        ?>
+
+        <h2>📞 Quick Test</h2>
+        
+        <div class="btn-group">
+            <a href="send_schedule_reminders.php" class="btn btn-success" target="_blank">
+                🧪 Test Email Pengingat
+            </a>
+            <a href="phpmyadmin" class="btn btn-info" target="_blank">
+                🗄️ Buka phpMyAdmin
+            </a>
+        </div>
+
+        <h2>⚠️ Hal-Hal Penting</h2>
+        
+        <div class="status warning">
+            <h3 style="margin-top: 0;">Timezone</h3>
+            <p>Pastikan timezone server sesuai dengan lokasi (Asia/Jakarta untuk Indonesia).</p>
+            <p>Jika ada perbedaan, email pengingat bisa terkirim di waktu yang salah.</p>
+        </div>
+
+        <div class="status warning">
+            <h3 style="margin-top: 0;">Email Configuration</h3>
+            <p>Email TIDAK akan terkirim jika SMTP config belum diatur.</p>
+            <p>Update <code>includes/email_config.php</code> dengan setting yang benar.</p>
+        </div>
+
+        <div class="status warning">
+            <h3 style="margin-top: 0;">Cronjob</h3>
+            <p>Tanpa cronjob, Email 2 (pengingat) tidak akan terkirim otomatis.</p>
+            <p>Pastikan cronjob sudah berjalan di server hosting Anda.</p>
+        </div>
+
+        <div class="status success">
+            <h3 style="margin-top: 0;">✅ Selesai!</h3>
+            <p>Setelah setup selesai, sistem akan:</p>
+            <ul>
+                <li>✓ Mengirim Email 1 langsung saat jadwal dibuat</li>
+                <li>✓ Menyimpan jadwal pengingat otomatis</li>
+                <li>✓ Mengirim Email 2 pada waktu yang ditentukan (via cronjob)</li>
+                <li>✓ Mencatat semua status di database untuk monitoring</li>
+            </ul>
+        </div>
+
+        <hr style="margin: 30px 0; border: none; border-top: 2px solid #ddd;">
+        
+        <p style="text-align: center; color: #666; font-size: 12px;">
+            <strong>Web Sunsal</strong> - HR & Inventory Management System<br>
+            Email Reminder System v1.0 - Production Ready ✅<br>
+            Last Updated: 20 Januari 2026
+        </p>
+    </div>
+</body>
+</html>

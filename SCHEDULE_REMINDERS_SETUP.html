@@ -1,0 +1,270 @@
+<?php
+/**
+ * SETUP GUIDE - Email Pengingat Jadwal Otomatis
+ * 
+ * Script ini menjelaskan cara mengatur email pengingat jadwal otomatis
+ * agar email dikirim pada waktu yang ditentukan.
+ */
+?>
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Setup Email Pengingat Jadwal</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 3px solid #e74c3c;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #34495e;
+            margin-top: 30px;
+        }
+        .code-block {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+        }
+        .step {
+            background: #ecf0f1;
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 4px solid #3498db;
+            border-radius: 5px;
+        }
+        .warning {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        .success {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        ul {
+            line-height: 1.8;
+        }
+        .btn {
+            background: #e74c3c;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 0;
+        }
+        .btn:hover {
+            background: #c0392b;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📧 Setup Email Pengingat Jadwal Otomatis</h1>
+        
+        <div class="success">
+            <h3>✅ Sistem Email Pengingat Sudah Siap!</h3>
+            <p>
+                Sistem telah diimplementasikan dengan 2 tahap pengiriman email:
+            </p>
+            <ul>
+                <li><strong>Email 1:</strong> Dikirim langsung saat jadwal dibuat/diupdate</li>
+                <li><strong>Email 2:</strong> Dikirim otomatis pada tanggal dan jam yang ditentukan</li>
+            </ul>
+        </div>
+
+        <h2>🔧 Cara Mengaktifkan Pengiriman Email Otomatis</h2>
+        
+        <div class="step">
+            <h3>Opsi 1: Menggunakan Cronjob (Recommended - Linux/Unix/XAMPP)</h3>
+            <p>Cronjob akan menjalankan script secara berkala untuk mengirim pengingat email.</p>
+            
+            <h4>Langkah 1: Akses Control Panel Hosting / Server</h4>
+            <p>Buka cPanel, Plesk, atau SSH terminal sesuai dengan hosting Anda.</p>
+            
+            <h4>Langkah 2: Masuk ke Cron Jobs</h4>
+            <p>Di cPanel: System → Cron Jobs</p>
+            
+            <h4>Langkah 3: Tambah Cronjob Baru</h4>
+            <p>Gunakan salah satu setting berikut sesuai kebutuhan:</p>
+            
+            <h5>Opsi A: Jalankan setiap 5 menit (Recommended)</h5>
+            <div class="code-block">
+*/5 * * * * curl -s http://localhost/web_sunsal/send_schedule_reminders.php > /dev/null 2>&1
+            </div>
+            <p>Keterangan:</p>
+            <ul>
+                <li><code>*/5</code> = Setiap 5 menit</li>
+                <li><code>* * * *</code> = Setiap hari, setiap jam</li>
+                <li>Script akan mengirim email yang sudah saatnya dikirim</li>
+            </ul>
+
+            <h5>Opsi B: Jalankan setiap menit (Lebih sering, untuk testing)</h5>
+            <div class="code-block">
+* * * * * curl -s http://localhost/web_sunsal/send_schedule_reminders.php > /dev/null 2>&1
+            </div>
+
+            <h5>Opsi C: Jalankan setiap 10 menit</h5>
+            <div class="code-block">
+*/10 * * * * curl -s http://localhost/web_sunsal/send_schedule_reminders.php > /dev/null 2>&1
+            </div>
+
+            <h4>Langkah 4: Test Cronjob</h4>
+            <p>Buat jadwal dengan waktu 5 menit ke depan, lalu tunggu cronjob berjalan untuk memverifikasi email dikirim.</p>
+        </div>
+
+        <div class="step">
+            <h3>Opsi 2: Menggunakan Task Scheduler (Windows)</h3>
+            <p>Jika menggunakan Windows Server atau XAMPP di Windows</p>
+            
+            <h4>Langkah 1: Buka Task Scheduler</h4>
+            <p>Tekan <code>Win + R</code>, ketik <code>taskschd.msc</code>, lalu Enter</p>
+            
+            <h4>Langkah 2: Buat Task Baru</h4>
+            <ul>
+                <li>Klik "Create Basic Task"</li>
+                <li>Berikan nama: "Web Sunsal Schedule Reminder"</li>
+                <li>Klik Next</li>
+            </ul>
+
+            <h4>Langkah 3: Atur Trigger</h4>
+            <ul>
+                <li>Pilih "Daily" atau "On a schedule"</li>
+                <li>Atur untuk berulang setiap 5 menit</li>
+                <li>Klik Next</li>
+            </ul>
+
+            <h4>Langkah 4: Atur Action</h4>
+            <ul>
+                <li>Pilih "Start a program"</li>
+                <li>Program/Script: <code>C:\xampp\php\php.exe</code></li>
+                <li>Add arguments: <code>-f "C:\xampp\htdocs\web_sunsal\send_schedule_reminders.php"</code></li>
+                <li>Klik Next</li>
+            </ul>
+
+            <h4>Langkah 5: Finish dan Test</h4>
+            <p>Klik Finish untuk menyimpan task</p>
+        </div>
+
+        <div class="step">
+            <h3>Opsi 3: Manual Testing (Untuk Development)</h3>
+            <p>Jalankan script secara manual untuk test:</p>
+            
+            <h5>Menggunakan Browser:</h5>
+            <div class="code-block">
+http://localhost/web_sunsal/send_schedule_reminders.php
+            </div>
+
+            <h5>Menggunakan Command Line (Windows):</h5>
+            <div class="code-block">
+C:\xampp\php\php.exe -f "C:\xampp\htdocs\web_sunsal\send_schedule_reminders.php"
+            </div>
+
+            <h5>Menggunakan Command Line (Linux/Mac):</h5>
+            <div class="code-block">
+php /path/to/web_sunsal/send_schedule_reminders.php
+            </div>
+        </div>
+
+        <div class="warning">
+            <h3>⚠️ Penting - Setup Keamanan</h3>
+            <p>Untuk mencegah akses tidak sah ke script pengingat email, lakukan langkah berikut:</p>
+            
+            <h4>Edit file: <code>send_schedule_reminders.php</code></h4>
+            <p>Cari baris berikut:</p>
+            <div class="code-block">
+$validKey = 'your-secret-key-for-reminders';
+            </div>
+            
+            <p>Ganti dengan key yang unik dan aman:</p>
+            <div class="code-block">
+$validKey = 'ganti-dengan-key-rahasia-anda-12345';
+            </div>
+
+            <p>Kemudian gunakan key tersebut saat menjalankan script:</p>
+            <div class="code-block">
+http://localhost/web_sunsal/send_schedule_reminders.php?key=ganti-dengan-key-rahasia-anda-12345
+            </div>
+
+            <p>Atau di cronjob:</p>
+            <div class="code-block">
+*/5 * * * * curl -s "http://localhost/web_sunsal/send_schedule_reminders.php?key=ganti-dengan-key-rahasia-anda-12345" > /dev/null 2>&1
+            </div>
+        </div>
+
+        <div class="step">
+            <h3>📊 Monitor Email yang Dikirim</h3>
+            <p>Untuk melihat status pengiriman email pengingat, query table jadwal_reminder:</p>
+            <div class="code-block">
+SELECT * FROM jadwal_reminder WHERE sent_at IS NOT NULL ORDER BY sent_at DESC;
+            </div>
+            
+            <p>Untuk melihat pengingat yang belum dikirim:</p>
+            <div class="code-block">
+SELECT * FROM jadwal_reminder WHERE sent_at IS NULL AND reminder_datetime <= NOW();
+            </div>
+        </div>
+
+        <div class="success">
+            <h3>✅ Ringkasan Implementasi</h3>
+            <ul>
+                <li>✓ Tabel <code>jadwal_reminder</code> akan dibuat otomatis saat jadwal dibuat</li>
+                <li>✓ Email 1 dikirim langsung saat pembuatan/update jadwal</li>
+                <li>✓ Email 2 disimpan di queue dan dikirim pada waktu yang ditentukan</li>
+                <li>✓ Script <code>send_schedule_reminders.php</code> siap untuk cronjob</li>
+                <li>✓ Status pengiriman dicatat di database untuk monitoring</li>
+            </ul>
+        </div>
+
+        <h2>📞 Troubleshooting</h2>
+        
+        <div class="step">
+            <h3>Email Tidak Terkirim?</h3>
+            <ul>
+                <li><strong>Cek Email Config:</strong> Pastikan <code>includes/email_config.php</code> sudah dikonfigurasi dengan benar</li>
+                <li><strong>Cek Cronjob:</strong> Verifikasi cronjob sudah running di server</li>
+                <li><strong>Cek Error Log:</strong> Lihat file error log PHP untuk error details</li>
+                <li><strong>Cek Database:</strong> Verifikasi tabel jadwal_reminder ada dan terisi dengan data</li>
+                <li><strong>Test Manual:</strong> Jalankan script secara manual via browser untuk debug</li>
+            </ul>
+        </div>
+
+        <div class="step">
+            <h3>Melihat Log Email</h3>
+            <p>Error email disimpan di PHP error log. Lokasi di XAMPP:</p>
+            <div class="code-block">
+C:\xampp\apache\logs\error.log
+C:\xampp\php\logs\php_error.log
+            </div>
+        </div>
+    </div>
+</body>
+</html>

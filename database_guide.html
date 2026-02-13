@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panduan Import Database Peminjaman Barang</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1, h2 {
+            color: #2c3e50;
+        }
+        .method {
+            background: #f8f9fa;
+            border-left: 4px solid #007bff;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        .code {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+            margin: 10px 0;
+        }
+        .warning {
+            background: #fff3cd;
+            border: 1px solid #f39c12;
+            color: #856404;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .success {
+            background: #d4edda;
+            border: 1px solid #27ae60;
+            color: #155724;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .error {
+            background: #f8d7da;
+            border: 1px solid #e74c3c;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📋 Panduan Import Database Peminjaman Barang</h1>
+
+        <div class="warning">
+            <strong>⚠️ Masalah yang sering terjadi:</strong>
+            <ul>
+                <li>Foreign key constraints yang mereferensi tabel yang belum ada</li>
+                <li>Views yang dibuat sebelum tabel lengkap</li>
+                <li>Character set yang tidak kompatibel</li>
+                <li>Engine storage yang tidak didukung</li>
+            </ul>
+        </div>
+
+        <h2>📁 File Database yang Tersedia</h2>
+        <ul>
+            <li><code>peminjaman_barang.sql</code> - Versi lengkap dengan views</li>
+            <li><code>peminjaman_barang_simple.sql</code> - Versi sederhana tanpa views (recommended)</li>
+        </ul>
+
+        <h2>🚀 Metode Import</h2>
+
+        <div class="method">
+            <h3>Metode 1: Via phpMyAdmin (Recommended)</h3>
+            <ol>
+                <li>Buka <a href="http://localhost/phpmyadmin" target="_blank">phpMyAdmin</a></li>
+                <li>Klik menu <strong>"Databases"</strong></li>
+                <li>Buat database baru: <code>peminjaman_barang_db</code></li>
+                <li>Klik database yang baru dibuat</li>
+                <li>Klik tab <strong>"Import"</strong></li>
+                <li>Klik <strong>"Choose File"</strong> dan pilih <code>database/peminjaman_barang_simple.sql</code></li>
+                <li>Klik <strong>"Go"</strong></li>
+            </ol>
+        </div>
+
+        <div class="method">
+            <h3>Metode 2: Via Command Line</h3>
+            <div class="code">
+mysql -u root -p peminjaman_barang_db &lt; database/peminjaman_barang_simple.sql
+            </div>
+            <p><strong>Untuk Windows PowerShell:</strong></p>
+            <div class="code">
+Get-Content database\peminjaman_barang_simple.sql | mysql -u root -p peminjaman_barang_db
+            </div>
+        </div>
+
+        <div class="method">
+            <h3>Metode 3: Via Script PHP (Automated)</h3>
+            <p>Kunjungi: <a href="test_import.php" target="_blank">http://localhost/web_sunsal/test_import.php</a></p>
+            <p>Script ini akan:</p>
+            <ul>
+                <li>Membuat database otomatis</li>
+                <li>Import tabel satu per satu</li>
+                <li>Melaporkan error jika ada</li>
+                <li>Test koneksi ke semua tabel</li>
+            </ul>
+        </div>
+
+        <h2>🔧 Troubleshooting</h2>
+
+        <div class="error">
+            <h4>Jika Import Gagal:</h4>
+            <ol>
+                <li><strong>Hapus database lama:</strong> <code>DROP DATABASE peminjaman_barang_db;</code></li>
+                <li><strong>Buat ulang database:</strong> <code>CREATE DATABASE peminjaman_barang_db;</code></li>
+                <li><strong>Gunakan file simple:</strong> <code>peminjaman_barang_simple.sql</code></li>
+                <li><strong>Nonaktifkan foreign key:</strong> <code>SET FOREIGN_KEY_CHECKS = 0;</code></li>
+            </ol>
+        </div>
+
+        <div class="success">
+            <h4>✅ Verifikasi Import Berhasil:</h4>
+            <ul>
+                <li>Database <code>peminjaman_barang_db</code> ada di phpMyAdmin</li>
+                <li>Tabel berikut ada: karyawan, kategori_barang, barang, peminjaman, izin</li>
+                <li>Data sample sudah ter-insert</li>
+                <li>Tidak ada error foreign key</li>
+            </ul>
+        </div>
+
+        <h2>📊 Struktur Database</h2>
+        <div class="code">
+peminjaman_barang_db/
+├── karyawan (data karyawan)
+├── kategori_barang (kategori barang)
+├── barang (inventori barang)
+├── sn_history (riwayat verifikasi SN)
+├── peminjaman (record peminjaman)
+├── riwayat_peminjaman (history transaksi)
+└── izin (permintaan izin)
+        </div>
+
+        <h2>🎯 Data Sample</h2>
+        <p>File simple sudah menyertakan data sample:</p>
+        <ul>
+            <li>3 karyawan (John Doe, Jane Smith, Bob Johnson)</li>
+            <li>4 kategori barang (Elektronik, Furniture, Tools, Kendaraan)</li>
+            <li>4 barang sample (Laptop, Monitor, Kursi, Obeng)</li>
+        </ul>
+
+        <div class="warning">
+            <strong>💡 Tips:</strong>
+            <ul>
+                <li>Gunakan file <code>_simple.sql</code> untuk import pertama kali</li>
+                <li>Pastikan MySQL service sedang berjalan</li>
+                <li>Backup database existing sebelum import</li>
+                <li>Jika masih error, coba import tabel per tabel</li>
+            </ul>
+        </div>
+
+        <hr>
+        <p style="text-align: center; color: #666;">
+            Jika masih ada masalah, periksa error log MySQL atau hubungi administrator sistem.
+        </p>
+    </div>
+</body>
+</html>

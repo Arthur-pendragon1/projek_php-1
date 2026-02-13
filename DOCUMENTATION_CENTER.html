@@ -1,0 +1,677 @@
+<?php
+/**
+ * EMAIL PENGINGAT JADWAL - DOCUMENTATION CENTER
+ * 
+ * Hub untuk semua dokumentasi dan panduan
+ */
+?>
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📧 Email Pengingat Jadwal - Documentation Center</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+
+        .header h1 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        .status-badge {
+            display: inline-block;
+            background: #28a745;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+
+        .docs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .doc-card {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            border-top: 4px solid #667eea;
+            cursor: pointer;
+        }
+
+        .doc-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+        }
+
+        .doc-card.quickstart {
+            border-top-color: #ff6b6b;
+        }
+
+        .doc-card.setup {
+            border-top-color: #4ecdc4;
+        }
+
+        .doc-card.reference {
+            border-top-color: #ffe66d;
+        }
+
+        .doc-card.technical {
+            border-top-color: #95e1d3;
+        }
+
+        .doc-card.summary {
+            border-top-color: #c7b3e5;
+        }
+
+        .doc-icon {
+            font-size: 40px;
+            margin-bottom: 15px;
+        }
+
+        .doc-card h2 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 1.5em;
+        }
+
+        .doc-card p {
+            color: #666;
+            margin-bottom: 15px;
+            line-height: 1.6;
+            font-size: 14px;
+        }
+
+        .doc-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: #999;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+        }
+
+        .btn-wrapper {
+            margin-top: 15px;
+        }
+
+        .btn {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .btn:hover {
+            background: #5568d3;
+            transform: scale(1.05);
+        }
+
+        .btn-quickstart {
+            background: #ff6b6b;
+        }
+
+        .btn-quickstart:hover {
+            background: #ff5252;
+        }
+
+        .btn-setup {
+            background: #4ecdc4;
+        }
+
+        .btn-setup:hover {
+            background: #45b8b0;
+        }
+
+        .section {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .section h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #667eea;
+        }
+
+        .feature-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .feature-list li {
+            padding: 12px 0;
+            padding-left: 30px;
+            position: relative;
+            color: #555;
+            line-height: 1.6;
+        }
+
+        .feature-list li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #28a745;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        th {
+            background: #f8f9fa;
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        tr:hover {
+            background: #f8f9fa;
+        }
+
+        .code-block {
+            background: #f8f9fa;
+            padding: 15px;
+            border-left: 3px solid #667eea;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-size: 13px;
+        }
+
+        .timeline {
+            position: relative;
+            padding: 20px 0;
+        }
+
+        .timeline-item {
+            padding-left: 50px;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .timeline-item:before {
+            content: "";
+            position: absolute;
+            left: 15px;
+            top: 0;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: #667eea;
+            border: 3px solid white;
+            box-shadow: 0 0 0 3px #667eea;
+        }
+
+        .timeline-item:after {
+            content: "";
+            position: absolute;
+            left: 24px;
+            top: 18px;
+            width: 2px;
+            height: 30px;
+            background: #ddd;
+        }
+
+        .timeline-item:last-child:after {
+            display: none;
+        }
+
+        .timeline-title {
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+
+        .timeline-desc {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .warning-box {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 20px;
+            border-radius: 3px;
+            margin: 20px 0;
+        }
+
+        .success-box {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+            padding: 20px;
+            border-radius: 3px;
+            margin: 20px 0;
+        }
+
+        .info-box {
+            background: #d1ecf1;
+            border-left: 4px solid #17a2b8;
+            padding: 20px;
+            border-radius: 3px;
+            margin: 20px 0;
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px;
+            color: white;
+            font-size: 12px;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8em;
+            }
+
+            .docs-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .doc-card {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- HEADER -->
+        <div class="header">
+            <h1>📧 Email Pengingat Jadwal Otomatis</h1>
+            <p>
+                Sistem pengiriman email 2-tahap untuk notifikasi jadwal kegiatan.<br>
+                Email pertama dikirim saat pembuatan, Email kedua dikirim otomatis pada waktu yang ditentukan.
+            </p>
+            <div class="status-badge">✅ PRODUCTION READY v1.0</div>
+        </div>
+
+        <!-- DOCUMENTATION GRID -->
+        <div class="docs-grid">
+            <!-- QUICKSTART -->
+            <div class="doc-card quickstart">
+                <div class="doc-icon">⚡</div>
+                <h2>Quick Start</h2>
+                <p>
+                    Panduan cepat untuk setup sistem dalam 5 langkah. 
+                    Cocok untuk yang ingin langsung mulai tanpa detail teknis.
+                </p>
+                <div class="doc-meta">
+                    <span>⏱️ ~10 menit</span>
+                    <span>📊 Beginner</span>
+                </div>
+                <div class="btn-wrapper">
+                    <a href="SCHEDULE_REMINDERS_QUICKSTART.html" class="btn btn-quickstart">
+                        Buka Panduan →
+                    </a>
+                </div>
+            </div>
+
+            <!-- SETUP GUIDE -->
+            <div class="doc-card setup">
+                <div class="doc-icon">⚙️</div>
+                <h2>Setup Guide</h2>
+                <p>
+                    Panduan setup detail dengan berbagai opsi (Linux, Windows, Manual). 
+                    Include security setup dan troubleshooting lengkap.
+                </p>
+                <div class="doc-meta">
+                    <span>⏱️ ~30 menit</span>
+                    <span>📊 Intermediate</span>
+                </div>
+                <div class="btn-wrapper">
+                    <a href="SCHEDULE_REMINDERS_SETUP.html" class="btn btn-setup">
+                        Buka Panduan →
+                    </a>
+                </div>
+            </div>
+
+            <!-- COMMAND REFERENCE -->
+            <div class="doc-card reference">
+                <div class="doc-icon">🛠️</div>
+                <h2>Command Reference</h2>
+                <p>
+                    Daftar lengkap command untuk setup, testing, monitoring, 
+                    dan maintenance. Format code siap copy-paste.
+                </p>
+                <div class="doc-meta">
+                    <span>⏱️ Reference</span>
+                    <span>📊 Advanced</span>
+                </div>
+                <div class="btn-wrapper">
+                    <a href="COMMAND_REFERENCE.html" class="btn btn-setup">
+                        Lihat Commands →
+                    </a>
+                </div>
+            </div>
+
+            <!-- TECHNICAL DOCS -->
+            <div class="doc-card technical">
+                <div class="doc-icon">📖</div>
+                <h2>Technical Docs</h2>
+                <p>
+                    Dokumentasi teknis lengkap untuk developer. 
+                    Include arsitektur, database schema, query monitoring, dan FAQ.
+                </p>
+                <div class="doc-meta">
+                    <span>⏱️ Reference</span>
+                    <span>📊 Expert</span>
+                </div>
+                <div class="btn-wrapper">
+                    <a href="SCHEDULE_REMINDERS_README.md" class="btn btn-setup">
+                        Baca Dokumentasi →
+                    </a>
+                </div>
+            </div>
+
+            <!-- IMPLEMENTATION SUMMARY -->
+            <div class="doc-card summary">
+                <div class="doc-icon">📋</div>
+                <h2>Implementation Summary</h2>
+                <p>
+                    Ringkasan lengkap implementasi sistem. 
+                    File yang diubah, database changes, dan testing checklist.
+                </p>
+                <div class="doc-meta">
+                    <span>⏱️ ~15 menit</span>
+                    <span>📊 Intermediate</span>
+                </div>
+                <div class="btn-wrapper">
+                    <a href="IMPLEMENTATION_SUMMARY.md" class="btn btn-setup">
+                        Lihat Summary →
+                    </a>
+                </div>
+            </div>
+
+            <!-- README -->
+            <div class="doc-card summary">
+                <div class="doc-icon">📚</div>
+                <h2>Main README</h2>
+                <p>
+                    Pengenalan lengkap sistem dengan navigasi ke semua dokumentasi lainnya. 
+                    Start dari sini untuk overview komprehensif.
+                </p>
+                <div class="doc-meta">
+                    <span>⏱️ ~20 menit</span>
+                    <span>📊 Beginner</span>
+                </div>
+                <div class="btn-wrapper">
+                    <a href="README_EMAIL_REMINDERS.md" class="btn btn-setup">
+                        Baca README →
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- QUICK NAVIGATION -->
+        <div class="section">
+            <h2>🎯 Navigasi Cepat</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Saya Ingin...</th>
+                        <th>Buka File Ini</th>
+                        <th>Waktu</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Setup sistem cepat</td>
+                        <td><a href="SCHEDULE_REMINDERS_QUICKSTART.html">QUICKSTART.html</a></td>
+                        <td>10 min</td>
+                    </tr>
+                    <tr>
+                        <td>Setup di Linux/cPanel</td>
+                        <td><a href="SCHEDULE_REMINDERS_SETUP.html">SETUP.html</a></td>
+                        <td>20 min</td>
+                    </tr>
+                    <tr>
+                        <td>Setup di Windows</td>
+                        <td><a href="SCHEDULE_REMINDERS_SETUP.html">SETUP.html</a> (Opsi B)</td>
+                        <td>20 min</td>
+                    </tr>
+                    <tr>
+                        <td>Cari command tertentu</td>
+                        <td><a href="COMMAND_REFERENCE.html">COMMAND_REFERENCE.html</a></td>
+                        <td>5 min</td>
+                    </tr>
+                    <tr>
+                        <td>Monitoring & query database</td>
+                        <td><a href="SCHEDULE_REMINDERS_README.md">README.md</a></td>
+                        <td>15 min</td>
+                    </tr>
+                    <tr>
+                        <td>Overview implementasi</td>
+                        <td><a href="IMPLEMENTATION_SUMMARY.md">IMPLEMENTATION_SUMMARY.md</a></td>
+                        <td>15 min</td>
+                    </tr>
+                    <tr>
+                        <td>Troubleshooting masalah</td>
+                        <td><a href="SCHEDULE_REMINDERS_README.md">README.md</a> (Troubleshooting)</td>
+                        <td>10 min</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- SYSTEM OVERVIEW -->
+        <div class="section">
+            <h2>🏗️ Arsitektur Sistem</h2>
+
+            <div style="margin: 20px 0;">
+                <h3 style="color: #667eea; margin-bottom: 15px;">Alur Kerja</h3>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-title">1. Admin Membuat Jadwal</div>
+                        <div class="timeline-desc">Admin login ke jadual_kegiatan.php dan membuat jadwal baru</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-title">2. Email 1 Dikirim (Langsung)</div>
+                        <div class="timeline-desc">Notifikasi langsung ke semua user tentang jadwal baru</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-title">3. Jadwal Tersimpan</div>
+                        <div class="timeline-desc">Jadwal disimpan ke tabel jadwal dan jadwal_reminder</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-title">4. Cronjob Monitor</div>
+                        <div class="timeline-desc">Setiap 5 menit, cronjob jalankan send_schedule_reminders.php</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-title">5. Email 2 Dikirim (Otomatis)</div>
+                        <div class="timeline-desc">Saat reminder_datetime tercapai, Email 2 dikirim otomatis</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-title">6. Status Tercatat</div>
+                        <div class="timeline-desc">Status pengiriman (sent_at) tercatat di database</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="success-box">
+                <strong>✅ Sistem siap untuk 2-tahap email pengingat!</strong><br>
+                Email 1 sudah aktif. Email 2 perlu setup cronjob.
+            </div>
+        </div>
+
+        <!-- KEY FEATURES -->
+        <div class="section">
+            <h2>✨ Fitur Utama</h2>
+            <ul class="feature-list">
+                <li><strong>2-Tahap Email Pengingat</strong> - Notifikasi langsung + Pengingat terjadwal</li>
+                <li><strong>Database Tracking</strong> - Setiap email tercatat dengan status pengiriman</li>
+                <li><strong>Auto Setup</strong> - Tabel jadwal_reminder dibuat otomatis saat first use</li>
+                <li><strong>Flexible Cronjob</strong> - Frequency configurable (1 menit, 5 menit, dll)</li>
+                <li><strong>Cross-Platform</strong> - Compatible Linux, Windows, cPanel, Docker, dll</li>
+                <li><strong>Security</strong> - Secret key protection, email validation, SQL injection prevention</li>
+                <li><strong>Monitoring</strong> - Query sederhana untuk check status email</li>
+                <li><strong>Error Handling</strong> - Logging lengkap untuk debugging</li>
+                <li><strong>Production Ready</strong> - Tested dan siap untuk production environment</li>
+            </ul>
+        </div>
+
+        <!-- IMPORTANT NOTES -->
+        <div class="section">
+            <h2>⚠️ Hal Penting</h2>
+
+            <div class="warning-box">
+                <strong>🔧 Setup Cronjob Diperlukan</strong><br>
+                Email 2 (pengingat terjadwal) hanya berfungsi jika cronjob sudah setup. 
+                Tanpa cronjob, hanya Email 1 (notifikasi langsung) yang terkirim.
+            </div>
+
+            <div class="info-box">
+                <strong>📧 Email Config Harus Benar</strong><br>
+                Pastikan SMTP settings di <code>includes/email_config.php</code> sudah dikonfigurasi 
+                dengan benar sebelum menggunakan sistem.
+            </div>
+
+            <div class="warning-box">
+                <strong>🕐 Timezone Penting</strong><br>
+                Pastikan timezone server sesuai dengan lokasi untuk memastikan email dikirim di waktu yang benar.
+            </div>
+
+            <div class="success-box">
+                <strong>✅ Testing Recommended</strong><br>
+                Buat jadwal test dengan waktu 5 menit ke depan untuk memverifikasi sistem bekerja dengan benar.
+            </div>
+        </div>
+
+        <!-- FILES SUMMARY -->
+        <div class="section">
+            <h2>📁 File & Database Changes</h2>
+
+            <h3 style="color: #667eea; margin: 20px 0 15px 0;">File Baru Dibuat</h3>
+            <ul class="feature-list">
+                <li><code>send_schedule_reminders.php</code> - Script pengirim email pengingat</li>
+                <li><code>SCHEDULE_REMINDERS_QUICKSTART.html</code> - Panduan quick start</li>
+                <li><code>SCHEDULE_REMINDERS_SETUP.html</code> - Panduan setup detail</li>
+                <li><code>SCHEDULE_REMINDERS_README.md</code> - Dokumentasi teknis</li>
+                <li><code>COMMAND_REFERENCE.html</code> - Command reference guide</li>
+                <li><code>IMPLEMENTATION_SUMMARY.md</code> - Summary implementasi</li>
+                <li><code>README_EMAIL_REMINDERS.md</code> - Main README</li>
+                <li><code>DOCUMENTATION_CENTER.html</code> - Halaman ini</li>
+            </ul>
+
+            <h3 style="color: #667eea; margin: 20px 0 15px 0;">File Dimodifikasi</h3>
+            <ul class="feature-list">
+                <li><code>jadual/ajax.php</code> - Case 'add' & 'update' untuk pengingat</li>
+                <li><code>jadual_kegiatan.php</code> - Link ke panduan setup reminder</li>
+            </ul>
+
+            <h3 style="color: #667eea; margin: 20px 0 15px 0;">Database Changes</h3>
+            <ul class="feature-list">
+                <li><code>jadwal_reminder</code> - Tabel baru untuk menyimpan jadwal pengingat</li>
+                <li>Auto-created saat jadwal pertama kali dibuat</li>
+            </ul>
+        </div>
+
+        <!-- GETTING STARTED -->
+        <div class="section" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+            <h2 style="color: white; border-color: white;">🚀 Mulai Sekarang</h2>
+            
+            <h3 style="color: #fff; margin-top: 20px; margin-bottom: 10px;">Untuk Setup Cepat (Recommended):</h3>
+            <ol style="padding-left: 20px; margin-bottom: 20px;">
+                <li>Verifikasi email config di <code>includes/email_config.php</code></li>
+                <li>Buka <a href="SCHEDULE_REMINDERS_QUICKSTART.html" style="color: #ffe66d;">SCHEDULE_REMINDERS_QUICKSTART.html</a></li>
+                <li>Ikuti 5 langkah setup yang tersedia</li>
+                <li>Test dengan membuat jadwal</li>
+            </ol>
+
+            <h3 style="color: #fff; margin-bottom: 10px;">Untuk Setup Detail:</h3>
+            <ol style="padding-left: 20px;">
+                <li>Baca <a href="SCHEDULE_REMINDERS_SETUP.html" style="color: #ffe66d;">SCHEDULE_REMINDERS_SETUP.html</a> untuk opsi lengkap</li>
+                <li>Pilih opsi setup sesuai platform (Linux/Windows)</li>
+                <li>Follow langkah-langkah yang diberikan</li>
+                <li>Troubleshoot jika ada masalah menggunakan guide yang ada</li>
+            </ol>
+        </div>
+
+        <!-- SUPPORT -->
+        <div class="section">
+            <h2>💬 Bantuan & Support</h2>
+            <p style="margin-bottom: 20px;">
+                Jika mengalami masalah atau memiliki pertanyaan:
+            </p>
+            <ul class="feature-list">
+                <li>Baca dokumentasi yang relevan dari daftar di atas</li>
+                <li>Cek section "Troubleshooting" di <a href="SCHEDULE_REMINDERS_README.md">README.md</a></li>
+                <li>Lihat <a href="COMMAND_REFERENCE.html">COMMAND_REFERENCE.html</a> untuk testing & monitoring commands</li>
+                <li>Check error logs untuk debug detail: <code>apache/logs/error.log</code></li>
+                <li>Hubungi administrator sistem jika diperlukan</li>
+            </ul>
+        </div>
+
+        <!-- FOOTER -->
+        <footer>
+            <p>
+                <strong>Web Sunsal - HR & Inventory Management System</strong><br>
+                📧 Email Pengingat Jadwal v1.0<br>
+                Status: ✅ PRODUCTION READY<br>
+                Last Updated: 20 Januari 2026
+            </p>
+        </footer>
+    </div>
+</body>
+</html>

@@ -1,0 +1,653 @@
+<?php
+/**
+ * Command Reference - Email Pengingat Jadwal
+ * 
+ * File ini berisi command-command yang berguna untuk setup & maintenance
+ * sistem email pengingat jadwal
+ */
+?>
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Command Reference - Email Pengingat Jadwal</title>
+    <style>
+        body {
+            font-family: 'Courier New', monospace;
+            margin: 0;
+            padding: 20px;
+            background: #1e1e1e;
+            color: #d4d4d4;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        h1 {
+            color: #4ec9b0;
+            border-bottom: 2px solid #007acc;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #9cdcfe;
+            margin-top: 30px;
+        }
+        .section {
+            background: #252526;
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 3px solid #007acc;
+            border-radius: 3px;
+        }
+        .command-block {
+            background: #1e1e1e;
+            border: 1px solid #3e3e42;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 3px;
+            overflow-x: auto;
+        }
+        .command-title {
+            color: #ce9178;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .command-code {
+            color: #ce9178;
+            display: block;
+            margin: 5px 0;
+            padding: 5px;
+            background: #1e1e1e;
+            border-left: 2px solid #646695;
+        }
+        .command-desc {
+            color: #858585;
+            margin-top: 8px;
+            font-size: 13px;
+        }
+        .note {
+            background: #2d2d30;
+            border-left: 3px solid #ff9d00;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 3px;
+        }
+        .note-title {
+            color: #ff9d00;
+            font-weight: bold;
+        }
+        ul {
+            color: #d4d4d4;
+            line-height: 1.6;
+        }
+        .key {
+            color: #9cdcfe;
+            background: #1e1e1e;
+            padding: 2px 5px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: #252526;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border: 1px solid #3e3e42;
+        }
+        th {
+            background: #1e1e1e;
+            color: #4ec9b0;
+            font-weight: bold;
+        }
+        tr:hover {
+            background: #2d2d30;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📋 Command Reference - Email Pengingat Jadwal</h1>
+        
+        <!-- ========== CRONJOB COMMANDS ========== -->
+        <div class="section">
+            <h2>⏰ Setup Cronjob Commands</h2>
+            
+            <div class="command-block">
+                <div class="command-title">1. Linux/Unix - Setiap 5 Menit (Default)</div>
+                <div class="command-code">
+*/5 * * * * curl -s http://localhost/web_sunsal/send_schedule_reminders.php > /dev/null 2>&1
+                </div>
+                <div class="command-desc">
+                    ✓ Recommended untuk production<br>
+                    ✓ Email dikirim dalam 5 menit setelah waktu yang ditentukan<br>
+                    ✓ Lightweight untuk server
+                </div>
+            </div>
+
+            <div class="command-block">
+                <div class="command-title">2. Linux/Unix - Setiap 1 Menit (Untuk Precision)</div>
+                <div class="command-code">
+* * * * * curl -s http://localhost/web_sunsal/send_schedule_reminders.php > /dev/null 2>&1
+                </div>
+                <div class="command-desc">
+                    ✓ Email dikirim dalam 1 menit<br>
+                    ⚠ Lebih heavy di server, gunakan hanya jika diperlukan precision tinggi
+                </div>
+            </div>
+
+            <div class="command-block">
+                <div class="command-title">3. Linux/Unix - Dengan Secret Key</div>
+                <div class="command-code">
+*/5 * * * * curl -s "http://localhost/web_sunsal/send_schedule_reminders.php?key=YOUR_SECRET_KEY_HERE" > /dev/null 2>&1
+                </div>
+                <div class="command-desc">
+                    ✓ Ganti YOUR_SECRET_KEY_HERE dengan key yang aman<br>
+                    ✓ Recommended untuk security
+                </div>
+            </div>
+
+            <div class="command-block">
+                <div class="command-title">4. Linux/Unix - Dengan Logging</div>
+                <div class="command-code">
+*/5 * * * * curl -s http://localhost/web_sunsal/send_schedule_reminders.php >> /var/log/web_sunsal_reminders.log 2>&1
+                </div>
+                <div class="command-desc">
+                    ✓ Output disimpan ke log file<br>
+                    ✓ Berguna untuk debugging & monitoring
+                </div>
+            </div>
+
+            <div class="note">
+                <div class="note-title">💡 Cronjob Format Explanation</div>
+                <code>* * * * * command</code><br><br>
+                │ │ │ │ │<br>
+                │ │ │ │ └─── Day of Week (0-6, 0=Sunday)<br>
+                │ │ │ └───── Month (1-12)<br>
+                │ │ └─────── Day of Month (1-31)<br>
+                │ └───────── Hour (0-23)<br>
+                └─────────── Minute (0-59)<br><br>
+                <strong>Contoh:</strong><br>
+                <span class="key">*/5 * * * *</span> = Setiap 5 menit, setiap jam, setiap hari<br>
+                <span class="key">0 9 * * *</span> = Setiap hari jam 9:00 AM<br>
+                <span class="key">30 2 * * 0</span> = Setiap Minggu jam 2:30 AM
+            </div>
+        </div>
+
+        <!-- ========== WINDOWS TASK SCHEDULER ========== -->
+        <div class="section">
+            <h2>🪟 Windows Task Scheduler Commands</h2>
+
+            <div class="command-block">
+                <div class="command-title">PowerShell - Create Scheduled Task (Every 5 Minutes)</div>
+                <div class="command-code">
+$action = New-ScheduledTaskAction -Execute "C:\xampp\php\php.exe" -Argument '-f "C:\xampp\htdocs\web_sunsal\send_schedule_reminders.php"'<br>
+$trigger = New-ScheduledTaskTrigger -RepetitionInterval (New-TimeSpan -Minutes 5) -Once -At (Get-Date)<br>
+Register-ScheduledTask -TaskName "Web Sunsal Schedule Reminders" -Action $action -Trigger $trigger
+                </div>
+                <div class="command-desc">
+                    ✓ Run as Administrator di PowerShell<br>
+                    ✓ Task akan berjalan setiap 5 menit selamanya
+                </div>
+            </div>
+
+            <div class="command-block">
+                <div class="command-title">Command Prompt - Run Immediately</div>
+                <div class="command-code">
+C:\xampp\php\php.exe -f "C:\xampp\htdocs\web_sunsal\send_schedule_reminders.php"
+                </div>
+                <div class="command-desc">
+                    ✓ Jalankan script secara manual untuk testing<br>
+                    ✓ Akan menampilkan JSON response
+                </div>
+            </div>
+
+            <div class="command-block">
+                <div class="command-title">Command Prompt - Run with Output to File</div>
+                <div class="command-code">
+C:\xampp\php\php.exe -f "C:\xampp\htdocs\web_sunsal\send_schedule_reminders.php" >> C:\xampp\logs\reminders.log 2>&1
+                </div>
+                <div class="command-desc">
+                    ✓ Output disimpan ke file log<br>
+                    ✓ Gunakan di Task Scheduler untuk monitoring
+                </div>
+            </div>
+
+            <div class="note">
+                <div class="note-title">💡 Windows Task Scheduler GUI</div>
+                Alternatif menggunakan GUI (lebih mudah untuk non-technical):<br><br>
+                1. Tekan <span class="key">Win + R</span><br>
+                2. Ketik <span class="key">taskschd.msc</span> → Enter<br>
+                3. Click "Create Basic Task"<br>
+                4. Nama: "Web Sunsal Schedule Reminders"<br>
+                5. Trigger: Repeat every 5 minutes<br>
+                6. Action → Program: <span class="key">C:\xampp\php\php.exe</span><br>
+                7. Arguments: <span class="key">-f "C:\xampp\htdocs\web_sunsal\send_schedule_reminders.php"</span>
+            </div>
+        </div>
+
+        <!-- ========== TESTING COMMANDS ========== -->
+        <div class="section">
+            <h2>🧪 Testing Commands</h2>
+
+            <div class="command-block">
+                <div class="command-title">Test via Browser</div>
+                <div class="command-code">
+http://localhost/web_sunsal/send_schedule_reminders.php
+                </div>
+                <div class="command-desc">
+                    ✓ Buka di browser, lihat JSON response<br>
+                    ✓ Status harus: "success": true
+                </div>
+            </div>
+
+            <div class="command-block">
+                <div class="command-title">Test dengan Secret Key</div>
+                <div class="command-code">
+http://localhost/web_sunsal/send_schedule_reminders.php?key=YOUR_SECRET_KEY
+                </div>
+                <div class="command-desc">
+                    ✓ Ganti YOUR_SECRET_KEY dengan key yang ada di script<br>
+                    ✓ Test keamanan key validation
+                </div>
+            </div>
+
+            <div class="command-block">
+                <div class="command-title">Test via cURL (Linux/Mac)</div>
+                <div class="command-code">
+curl http://localhost/web_sunsal/send_schedule_reminders.php | json_pp
+                </div>
+                <div class="command-desc">
+                    ✓ Pretty print JSON response<br>
+                    ✓ Lihat detail error & status
+                </div>
+            </div>
+
+            <div class="command-block">
+                <div class="command-title">Test with cURL & Save to File</div>
+                <div class="command-code">
+curl -s http://localhost/web_sunsal/send_schedule_reminders.php > test_result.json<br>
+cat test_result.json
+                </div>
+                <div class="command-desc">
+                    ✓ Simpan response ke file<br>
+                    ✓ Lihat hasilnya kemudian
+                </div>
+            </div>
+
+            <div class="command-block">
+                <div class="command-title">Test with Verbose Output</div>
+                <div class="command-code">
+curl -v http://localhost/web_sunsal/send_schedule_reminders.php
+                </div>
+                <div class="command-desc">
+                    ✓ Tampilkan detail header & response<br>
+                    ✓ Useful untuk debugging connection issue
+                </div>
+            </div>
+        </div>
+
+        <!-- ========== DATABASE COMMANDS ========== -->
+        <div class="section">
+            <h2>🗄️ Database Monitoring Commands (MySQL/MariaDB)</h2>
+
+            <div class="command-block">
+                <div class="command-title">Check Tabel Exists</div>
+                <div class="command-code">
+SHOW TABLES LIKE 'jadwal_reminder';
+                </div>
+                <div class="command-desc">
+                    ✓ Verifikasi tabel sudah ada<br>
+                    ✓ Jalankan di phpMyAdmin atau MySQL client
+                </div>
+            </div>
+
+            <div class="command-block">
+                <div class="command-title">View All Pending Reminders</div>
+                <div class="command-code">
+SELECT * FROM jadwal_reminder WHERE sent_at IS NULL ORDER BY reminder_datetime ASC;
+                </div>
+                <div class="command-desc">
+                    ✓ Lihat email yang belum dikirim<br>
+                    ✓ sent_at = NULL artinya belum dikirim
+                </div>
+            </div>
+
+            <div class="command-block">
+                <div class="command-title">View All Sent Reminders</div>
+                <div class="command-code">
+SELECT * FROM jadwal_reminder WHERE sent_at IS NOT NULL ORDER BY sent_at DESC LIMIT 20;
+                </div>
+                <div class="command-desc">
+                    ✓ Lihat email yang sudah dikirim<br>
+                    ✓ Limit 20 untuk last 20 emails
+                </div>
+            </div>
+
+            <div class="command-block">
+                <div class="command-title">View Failed/Overdue Reminders</div>
+                <div class="command-code">
+SELECT * FROM jadwal_reminder <br>
+WHERE sent_at IS NULL <br>
+AND reminder_datetime &lt; DATE_SUB(NOW(), INTERVAL 1 HOUR) <br>
+ORDER BY reminder_datetime DESC;
+                </div>
+                <div class="command-desc">
+                    ✓ Lihat email yang sudah past time tapi belum dikirim<br>
+                    ✓ Indikasi ada masalah dengan cronjob atau script
+                </div>
+            </div>
+
+            <div class="command-block">
+                <div class="command-title">Count Statistics</div>
+                <div class="command-code">
+SELECT <br>
+  COUNT(*) as total,<br>
+  SUM(CASE WHEN sent_at IS NULL THEN 1 ELSE 0 END) as pending,<br>
+  SUM(CASE WHEN sent_at IS NOT NULL THEN 1 ELSE 0 END) as sent<br>
+FROM jadwal_reminder;
+                </div>
+                <div class="command-desc">
+                    ✓ Statistik keseluruhan reminder<br>
+                    ✓ Quick overview of system status
+                </div>
+            </div>
+
+            <div class="command-block">
+                <div class="command-title">Cleanup Old Reminders (Keep 3 Months)</div>
+                <div class="command-code">
+DELETE FROM jadwal_reminder <br>
+WHERE sent_at IS NOT NULL <br>
+AND sent_at &lt; DATE_SUB(NOW(), INTERVAL 3 MONTH);
+                </div>
+                <div class="command-desc">
+                    ⚠ Hati-hati! Hapus data selamanya<br>
+                    ✓ Jalankan secara berkala untuk maintenance<br>
+                    ✓ Backup database dulu sebelum cleanup
+                </div>
+            </div>
+
+            <div class="command-block">
+                <div class="command-title">View Table Structure</div>
+                <div class="command-code">
+DESC jadwal_reminder;<br>
+// atau<br>
+SHOW CREATE TABLE jadwal_reminder\G
+                </div>
+                <div class="command-desc">
+                    ✓ Lihat struktur & schema tabel<br>
+                    ✓ Verifikasi kolom & index sudah ada
+                </div>
+            </div>
+
+            <div class="command-block">
+                <div class="command-title">Reset Table (Delete All Data)</div>
+                <div class="command-code">
+TRUNCATE TABLE jadwal_reminder;
+                </div>
+                <div class="command-desc">
+                    ⚠️ DELETE ALL DATA PERMANENTLY<br>
+                    ✓ Gunakan hanya untuk reset/testing<br>
+                    ✓ Backup dulu sebelum jalankan
+                </div>
+            </div>
+        </div>
+
+        <!-- ========== LOG CHECKING ========== -->
+        <div class="section">
+            <h2>📊 Checking Logs</h2>
+
+            <div class="command-block">
+                <div class="command-title">Check PHP Error Log (Linux)</div>
+                <div class="command-code">
+tail -f /var/log/php_error.log<br>
+// atau di XAMPP<br>
+tail -f /opt/xampp/logs/php_error.log
+                </div>
+                <div class="command-desc">
+                    ✓ Lihat error real-time<br>
+                    ✓ -f untuk follow mode (live update)
+                </div>
+            </div>
+
+            <div class="command-block">
+                <div class="command-title">Check Apache Error Log (Linux)</div>
+                <div class="command-code">
+tail -f /var/log/apache2/error.log<br>
+// atau di XAMPP<br>
+tail -f /opt/xampp/logs/error.log
+                </div>
+                <div class="command-desc">
+                    ✓ Lihat Apache errors<br>
+                    ✓ Gunakan grep untuk filter
+                </div>
+            </div>
+
+            <div class="command-block">
+                <div class="command-title">Check XAMPP Log (Windows)</div>
+                <div class="command-code">
+C:\xampp\apache\logs\error.log<br>
+C:\xampp\php\logs\php_error.log
+                </div>
+                <div class="command-desc">
+                    ✓ Buka file dengan text editor<br>
+                    ✓ Cari "send_schedule_reminders" untuk filter relevan
+                </div>
+            </div>
+
+            <div class="command-block">
+                <div class="command-title">Grep for Specific Errors (Linux)</div>
+                <div class="command-code">
+grep "send_schedule_reminders" /var/log/php_error.log | tail -20
+                </div>
+                <div class="command-desc">
+                    ✓ Cari error terkait reminders saja<br>
+                    ✓ Tail -20 untuk last 20 entries
+                </div>
+            </div>
+
+            <div class="command-block">
+                <div class="command-title">Monitor Log Real-Time (Linux)</div>
+                <div class="command-code">
+tail -f /var/log/php_error.log | grep "send_schedule"
+                </div>
+                <div class="command-desc">
+                    ✓ Real-time monitor untuk specific error<br>
+                    ✓ Jalankan di terminal terpisah saat testing
+                </div>
+            </div>
+        </div>
+
+        <!-- ========== CONFIG EDIT ========== -->
+        <div class="section">
+            <h2>⚙️ Configuration Edit Commands</h2>
+
+            <div class="command-block">
+                <div class="command-title">Edit Secret Key (Linux)</div>
+                <div class="command-code">
+nano send_schedule_reminders.php<br>
+// Cari: $validKey = 'your-secret-key-for-reminders'<br>
+// Ganti dengan key anda<br>
+// Ctrl+X → Y → Enter untuk save
+                </div>
+                <div class="command-desc">
+                    ✓ Edit di Linux terminal<br>
+                    ✓ Atau gunakan vim: vim send_schedule_reminders.php
+                </div>
+            </div>
+
+            <div class="command-block">
+                <div class="command-title">Edit Email Config (Linux)</div>
+                <div class="command-code">
+nano includes/email_config.php
+                </div>
+                <div class="command-desc">
+                    ✓ Update SMTP settings<br>
+                    ✓ Check: SMTP_HOST, USERNAME, PASSWORD benar?
+                </div>
+            </div>
+
+            <div class="command-block">
+                <div class="command-title">View Secret Key</div>
+                <div class="command-code">
+grep "validKey" send_schedule_reminders.php
+                </div>
+                <div class="command-desc">
+                    ✓ Lihat key yang sekarang digunakan<br>
+                    ✓ Cek apakah sudah diganti dari default
+                </div>
+            </div>
+
+            <div class="command-block">
+                <div class="command-title">Test Email Config</div>
+                <div class="command-code">
+php -r "require 'includes/email_config.php'; echo 'SMTP_HOST: ' . SMTP_HOST . '\n';"
+                </div>
+                <div class="command-desc">
+                    ✓ Verify email config values<br>
+                    ✓ Check apakah readable dari PHP
+                </div>
+            </div>
+        </div>
+
+        <!-- ========== TROUBLESHOOTING ========== -->
+        <div class="section">
+            <h2>🔧 Troubleshooting Commands</h2>
+
+            <div class="command-block">
+                <div class="command-title">Check if Cronjob Installed</div>
+                <div class="command-code">
+crontab -l
+                </div>
+                <div class="command-desc">
+                    ✓ List semua cronjob yang ada<br>
+                    ✓ Verifikasi send_schedule_reminders ada
+                </div>
+            </div>
+
+            <div class="command-block">
+                <div class="command-title">Check Cronjob Logs</div>
+                <div class="command-code">
+grep CRON /var/log/syslog | tail -20<br>
+// atau<br>
+journalctl -u cron --no-pager | tail -20
+                </div>
+                <div class="command-desc">
+                    ✓ Lihat cronjob execution history<br>
+                    ✓ Cek apakah cronjob actually running
+                </div>
+            </div>
+
+            <div class="command-block">
+                <div class="command-title">Check PHP Version</div>
+                <div class="command-code">
+php --version<br>
+// atau di XAMPP<br>
+C:\xampp\php\php.exe --version
+                </div>
+                <div class="command-desc">
+                    ✓ Verify PHP compatibility<br>
+                    ✓ Minimum PHP 5.6 recommended
+                </div>
+            </div>
+
+            <div class="command-block">
+                <div class="command-title">Check MySQL Connection</div>
+                <div class="command-code">
+php -r "require 'jadual/config.php'; if ($conn) echo 'Connected OK'; else echo 'Failed';"
+                </div>
+                <div class="command-desc">
+                    ✓ Test database connection<br>
+                    ✓ Verify DB credentials benar
+                </div>
+            </div>
+
+            <div class="command-block">
+                <div class="command-title">Check File Permissions (Linux)</div>
+                <div class="command-code">
+ls -la send_schedule_reminders.php<br>
+ls -la includes/send_mail.php
+                </div>
+                <div class="command-desc">
+                    ✓ Verify file readable oleh web server<br>
+                    ✓ Permission harus min 644
+                </div>
+            </div>
+
+            <div class="command-block">
+                <div class="command-title">Check if URL Accessible</div>
+                <div class="command-code">
+wget -O - http://localhost/web_sunsal/send_schedule_reminders.php<br>
+// atau<br>
+curl http://localhost/web_sunsal/send_schedule_reminders.php
+                </div>
+                <div class="command-desc">
+                    ✓ Verify script callable from web<br>
+                    ✓ Check HTTP status & response
+                </div>
+            </div>
+
+            <div class="command-block">
+                <div class="command-title">Test Email Sending</div>
+                <div class="command-code">
+php -r "require 'includes/send_mail.php'; sendScheduleNotification('test@example.com', ['nama_kegiatan' => 'Test', 'tanggal' => date('Y-m-d'), 'waktu' => date('H:i'), 'deskripsi' => 'Test']);"
+                </div>
+                <div class="command-desc">
+                    ✓ Direct test email function<br>
+                    ✓ Check apakah email config working
+                </div>
+            </div>
+        </div>
+
+        <!-- ========== REFERENCE TABLE ========== -->
+        <div class="section">
+            <h2>📚 Quick Reference</h2>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Operator</th>
+                        <th>Arti</th>
+                        <th>Contoh</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>*</td>
+                        <td>Any value</td>
+                        <td>* * * * * = setiap menit</td>
+                    </tr>
+                    <tr>
+                        <td>,</td>
+                        <td>Multiple values</td>
+                        <td>0,30 * * * * = menit 0 dan 30</td>
+                    </tr>
+                    <tr>
+                        <td>-</td>
+                        <td>Range</td>
+                        <td>1-5 * * * * = menit 1-5</td>
+                    </tr>
+                    <tr>
+                        <td>/</td>
+                        <td>Step values</td>
+                        <td>*/5 * * * * = setiap 5 menit</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="note">
+            <div class="note-title">💡 General Tips</div>
+            <ul>
+                <li>Selalu backup database sebelum menjalankan DELETE queries</li>
+                <li>Test command di terminal sebelum jalankan di cronjob</li>
+                <li>Check logs secara berkala untuk detect issues early</li>
+                <li>Document semua perubahan yang dibuat</li>
+                <li>Keep secret key aman dan jangan share ke siapapun</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
